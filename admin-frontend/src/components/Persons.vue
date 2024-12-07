@@ -115,7 +115,32 @@
     <MDBModalHeader>
       <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
     </MDBModalHeader>
-    <MDBModalBody></MDBModalBody>
+    <MDBModalBody>
+      <MDBInput
+          type="text"
+          label="Личность"
+          id="formName"
+          v-model="formName"
+          wrapperClass="mb-4"
+      />
+
+      <MDBInput
+          type="email"
+          label="Траектория"
+          id="formEmail"
+          v-model="formEmail"
+          wrapperClass="mb-4"
+      />
+
+      <MDBTextarea
+          label="Описание"
+          id="formTextarea"
+          v-model="formTextarea"
+          wrapperClass="mb-4"
+      />
+
+      <MDBFile v-model="files" label="Добавить фото" />
+    </MDBModalBody>
     <MDBModalFooter>
       <MDBBtn color="secondary" @click="addPersonModal = false">Закрыть</MDBBtn>
       <MDBBtn color="success">Сохранить</MDBBtn>
@@ -189,11 +214,19 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
-  MDBBtn
+  MDBBtn,
+  MDBInput,
+  MDBTextarea,
+  MDBFile
 } from "mdb-vue-ui-kit";
 
 import { ref } from 'vue';
 const addPersonModal = ref(false);
+
+const formName = ref("");
+const formEmail = ref("");
+const formTextarea = ref("");
+const files = ref([]);
 
 defineProps<{ msg: string }>();
 </script>
