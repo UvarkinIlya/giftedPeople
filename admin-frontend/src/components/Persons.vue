@@ -8,8 +8,14 @@
             <div class="card mask-custom">
               <div class="card-body p-4 text-white">
 
-                <div class="text-center pt-3 pb-2">
+                <div class="position-relative text-center pt-3 pb-2">
                   <h2 class="my-4">Одарённые личности</h2>
+                  <MDBBtn
+                      id="add-button"
+                      class="btn btn-success position-absolute end-0 top-50 translate-middle-y"
+                      color="success"
+                      aria-controls="addPersonModal"
+                      @click="addPersonModal=true">Добавить</MDBBtn>
                 </div>
                 <table class="table text-white mb-0">
                   <thead>
@@ -97,12 +103,35 @@
       </div>
     </section>
   </MDBContainer>
+
+
+  <MDBModal
+      id="addPersonModal"
+      tabindex="-1"
+      labelledby="addPersonModalLabel"
+      size="lg"
+      v-model="addPersonModal"
+  >
+    <MDBModalHeader>
+      <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
+    </MDBModalHeader>
+    <MDBModalBody></MDBModalBody>
+    <MDBModalFooter>
+      <MDBBtn color="secondary" @click="addPersonModal = false">Закрыть</MDBBtn>
+      <MDBBtn color="success">Сохранить</MDBBtn>
+    </MDBModalFooter>
+  </MDBModal>
 </template>
 
 <style>
 #persons {
   padding: 0;
   overflow-x: hidden;
+}
+
+#add-button {
+  margin-top: 4px;
+  padding-right: 2rem;
 }
 
 .person-img-name-container {
@@ -153,7 +182,18 @@ th, td {
 </style>
 
 <script setup lang="ts">
-import {MDBContainer} from "mdb-vue-ui-kit";
+import {
+  MDBContainer,
+  MDBModal,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBBtn
+} from "mdb-vue-ui-kit";
+
+import { ref } from 'vue';
+const addPersonModal = ref(false);
 
 defineProps<{ msg: string }>();
 </script>
