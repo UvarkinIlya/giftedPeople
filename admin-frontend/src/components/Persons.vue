@@ -5,8 +5,10 @@ import {
 } from 'mdb-vue-ui-kit';
 import { ref } from 'vue';
 import ModalPerson from "./ModalPerson.vue";
+import SinglePerson from "./SinglePerson.vue";
 
 const isModelOpen = ref(false);
+
 </script>
 
 <template>
@@ -38,28 +40,7 @@ const isModelOpen = ref(false);
                   </tr>
                   </thead>
                   <tbody>
-                  <tr class="fw-normal">
-                    <th>
-                        <div class="person-img-name-container">
-                          <img
-                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg/411px-Einstein_1921_by_F_Schmutzer_-_restoration.jpg"
-                              alt="avatar 1" class="person-img">
-                          <span>Альберт Эйнштейн</span>
-                        </div>
-                    </th>
-                    <td class="align-middle text-center">
-                      <h5 class="mb-0"><span class="badge bg-success">1</span></h5>
-                    </td>
-                    <td class="align-middle">
-                      Эйнштейну принадлежит решающая роль в популяризации и введении в научный оборот новых физических...
-                    </td>
-                    <td class="align-middle">
-                      <a href="#!" data-mdb-tooltip-init title="Done"><i
-                          class="fas fa-edit fa-lg text-warning me-3"></i></a>
-                      <a href="#!" data-mdb-tooltip-init title="Remove"><i
-                          class="fas fa-trash-alt fa-lg text-danger"></i></a>
-                    </td>
-                  </tr>
+                  <SinglePerson name="Альберт Эйнштейн" img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg/411px-Einstein_1921_by_F_Schmutzer_-_restoration.jpg" road="1" description="some"/>
                   <tr class="fw-normal">
                     <th>
                       <div class="person-img-name-container">
