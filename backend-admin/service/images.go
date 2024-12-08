@@ -1,9 +1,10 @@
 package service
 
-// TODO maybe change []bytes
+import "mime/multipart"
+
 type ImageStorage interface {
 	GetImg(imageId string) ([]byte, error)
-	SaveImg(imageId string, image []byte) error
+	SaveImg(imageId string, image multipart.File) error
 }
 
 type ImageService struct {
@@ -20,6 +21,6 @@ func (s *ImageService) GetImg(imageId string) ([]byte, error) {
 	panic("implement me")
 }
 
-func (s *ImageService) SaveImg(imageId string, image []byte) error {
+func (s *ImageService) SaveImg(imageId string, image multipart.File) error {
 	panic("implement me")
 }

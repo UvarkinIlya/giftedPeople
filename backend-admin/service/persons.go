@@ -4,7 +4,7 @@ import "backend-admin/models"
 
 type storage interface {
 	GetAllPersons() ([]models.Person, error)
-	Save(person models.Person) error
+	Create(person models.Person) error
 	Delete(personId string) error
 }
 
@@ -19,13 +19,22 @@ func NewPersonService(storage storage) *PersonService {
 }
 
 func (s *PersonService) GetAllPersons() ([]models.Person, error) {
-	panic("implement me")
+	return s.storage.GetAllPersons()
 }
 
-func (s *PersonService) Save(person models.Person) error {
-	panic("implement me")
+func (s *PersonService) Create(person models.Person) error {
+	return s.storage.Create(person)
+}
+
+func (s *PersonService) Update(person models.Person) error {
+	err := s.storage.Delete(person.ID)
+	if err != nil {
+		return err
+	}
+
+	return s.storage.Create(person)
 }
 
 func (s *PersonService) Delete(personId string) error {
-	panic("implement me")
+	return s.storage.Delete(personId)
 }
