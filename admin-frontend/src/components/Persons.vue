@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import {
+  MDBContainer,
+  MDBBtn,
+} from 'mdb-vue-ui-kit';
+import { ref } from 'vue';
+import ModalPerson from "./ModalPerson.vue";
+
+const isModelOpen = ref(false);
+</script>
+
 <template>
   <MDBContainer fluid id="persons">
     <section class="min-vh-100 vw-100 gradient-custom-2">
@@ -14,8 +25,8 @@
                       id="add-button"
                       class="btn btn-success position-absolute end-0 top-50 translate-middle-y"
                       color="success"
-                      aria-controls="addPersonModal"
-                      @click="addPersonModal=true">Добавить</MDBBtn>
+                      aria-controls="isModalOpen"
+                      @click="isModelOpen=true">Добавить</MDBBtn>
                 </div>
                 <table class="table text-white mb-0">
                   <thead>
@@ -105,47 +116,7 @@
   </MDBContainer>
 
 
-  <MDBModal
-      id="addPersonModal"
-      tabindex="-1"
-      labelledby="addPersonModalLabel"
-      size="lg"
-      v-model="addPersonModal"
-  >
-    <MDBModalHeader>
-      <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
-    </MDBModalHeader>
-    <MDBModalBody>
-      <MDBInput
-          type="text"
-          label="Личность"
-          id="formName"
-          v-model="formName"
-          wrapperClass="mb-4"
-      />
-
-      <MDBInput
-          type="email"
-          label="Траектория"
-          id="formEmail"
-          v-model="formEmail"
-          wrapperClass="mb-4"
-      />
-
-      <MDBTextarea
-          label="Описание"
-          id="formTextarea"
-          v-model="formTextarea"
-          wrapperClass="mb-4"
-      />
-
-      <MDBFile v-model="files" label="Добавить фото" />
-    </MDBModalBody>
-    <MDBModalFooter>
-      <MDBBtn color="secondary" @click="addPersonModal = false">Закрыть</MDBBtn>
-      <MDBBtn color="success">Сохранить</MDBBtn>
-    </MDBModalFooter>
-  </MDBModal>
+  <ModalPerson v-model="isModelOpen" @close="isModelOpen=false"/>
 </template>
 
 <style>
@@ -205,28 +176,3 @@ th, td {
   box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
 }
 </style>
-
-<script setup lang="ts">
-import {
-  MDBContainer,
-  MDBModal,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBBtn,
-  MDBInput,
-  MDBTextarea,
-  MDBFile
-} from "mdb-vue-ui-kit";
-
-import { ref } from 'vue';
-const addPersonModal = ref(false);
-
-const formName = ref("");
-const formEmail = ref("");
-const formTextarea = ref("");
-const files = ref([]);
-
-defineProps<{ msg: string }>();
-</script>
