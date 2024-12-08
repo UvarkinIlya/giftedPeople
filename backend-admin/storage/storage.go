@@ -1,12 +1,14 @@
 package storage
 
 import (
+	"bytes"
 	"context"
-	"mime/multipart"
+	"io"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"backend-admin/models"
@@ -14,7 +16,7 @@ import (
 
 type Storage struct {
 	personsCollection *mongo.Collection
-	imagesCollection  *mongo.Collection
+	imagesCollection  *gridfs.Bucket
 }
 
 func New() (*Storage, error) {
@@ -30,8 +32,13 @@ func New() (*Storage, error) {
 		return nil, err
 	}
 
-	personsCollection := client.Database("persons").Collection("persons")
-	imagesCollection := client.Database("persons").Collection("images")
+	db := client.Database("persons")
+
+	personsCollection := db.Collection("persons")
+	imagesCollection, err := gridfs.NewBucket(db, options.GridFSBucket().SetName("images"))
+	if err != nil {
+		return nil, err
+	}
 
 	return &Storage{
 		personsCollection: personsCollection,
@@ -66,12 +73,17 @@ func (s *Storage) Delete(personId string) error {
 	return err
 }
 
-func (s *Storage) GetImg(imageId string) ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
+func (s *Storage) GetImg(imageId string) (io.Reader, error) {
+	buf := bytes.NewBuffer(nil)
+	_, err := s.imagesCollection.DownloadToStreamByName(imageId, buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf, nil
 }
 
-func (s *Storage) SaveImg(imageId string, image multipart.File) error {
-	// TODO implement me
-	panic("implement me")
+func (s *Storage) SaveImg(imageId string, image io.Reader) error {
+	_, err := s.imagesCollection.UploadFromStream(imageId, image)
+	return err
 }

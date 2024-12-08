@@ -1,7 +1,7 @@
 package srv
 
 import (
-	"mime/multipart"
+	"io"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -17,13 +17,8 @@ type personService interface {
 }
 
 type imagesService interface {
-	GetImg(imageId string) ([]byte, error)
-	SaveImg(imageId string, image multipart.File) error
-}
-
-type imgWithID struct {
-	id   string
-	file multipart.File
+	GetImg(imageId string) (io.Reader, error)
+	SaveImg(imageId string, image io.Reader) error
 }
 
 type Server struct {
@@ -69,7 +64,7 @@ func (s *Server) createPerson(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	err = s.imagesService.SaveImg(img.id, img.file)
+	err = s.imagesService.SaveImg(img.ID, img.File)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -88,7 +83,7 @@ func (s *Server) updatePerson(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	err = s.imagesService.SaveImg(img.id, img.file)
+	err = s.imagesService.SaveImg(img.ID, img.File)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -111,22 +106,22 @@ func (s *Server) getPersonByRoad(c echo.Context) error {
 	return nil
 }
 
-func getImgAndPerson(c echo.Context) (img imgWithID, person models.Person, err error) {
+func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person, err error) {
 	imgID := uuid.NewString()
 
 	file, err := c.FormFile("file")
 	if err != nil {
-		return imgWithID{}, models.Person{}, err
+		return models.ImgWithID{}, models.Person{}, err
 	}
 	src, err := file.Open()
 	if err != nil {
-		return imgWithID{}, models.Person{}, err
+		return models.ImgWithID{}, models.Person{}, err
 	}
 	defer src.Close()
 
-	img = imgWithID{
-		file: src,
-		id:   imgID,
+	img = models.ImgWithID{
+		ID:   imgID,
+		File: src,
 	}
 
 	person = models.Person{
