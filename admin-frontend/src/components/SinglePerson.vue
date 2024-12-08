@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import {ref} from "vue";
 
-  const props = defineProps(["name", "img", "road", "description"])
+  const props = defineProps(["name", "img", "road", "description", "isLast"])
 </script>
 
 <template>
   <tr class="fw-normal">
-    <th>
+    <th :class="isLast ? 'border-0' : ''">
       <div class="person-img-name-container">
         <img
             :src="img"
@@ -14,14 +14,14 @@
         <span>{{ name }}</span>
       </div>
     </th>
-    <td class="align-middle text-center">
+    <td :class="isLast ? 'border-0' : ''" class="align-middle text-center">
       <!-- TODO add color    -->
       <h5 class="mb-0">{{ road }}</h5>
     </td>
-    <td class="align-middle">
+    <td :class="isLast ? 'border-0' : ''" class="align-middle">
       {{ description }}
     </td>
-    <td class="align-middle">
+    <td :class="isLast ? 'border-0' : ''" class="align-middle">
       <a href="#!" data-mdb-tooltip-init title="Done"><i
           class="fas fa-edit fa-lg text-warning me-3"></i></a>
       <a href="#!" data-mdb-tooltip-init title="Remove"><i

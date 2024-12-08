@@ -1,14 +1,19 @@
-<script setup lang="ts">
+<script setup>
 import {
   MDBContainer,
   MDBBtn,
 } from 'mdb-vue-ui-kit';
-import { ref } from 'vue';
+import {ref} from 'vue';
 import ModalPerson from "./ModalPerson.vue";
 import SinglePerson from "./SinglePerson.vue";
 
 const isModelOpen = ref(false);
 
+
+const persons = ref(null);
+fetch('http://localhost:8080/person')
+    .then(response => response.json())
+    .then(data => persons.value = data);
 </script>
 
 <template>
@@ -40,49 +45,15 @@ const isModelOpen = ref(false);
                   </tr>
                   </thead>
                   <tbody>
-                  <SinglePerson name="Альберт Эйнштейн" img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg/411px-Einstein_1921_by_F_Schmutzer_-_restoration.jpg" road="1" description="some"/>
-                  <tr class="fw-normal">
-                    <th>
-                      <div class="person-img-name-container">
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Tesla_circa_1890.jpeg/411px-Tesla_circa_1890.jpeg"
-                            alt="avatar 1" class="person-img">
-                        <span>Никола Тесла</span>
-                      </div>
-                    </th>
-                    <td class="align-middle text-center">
-                      <h5 class="mb-0"><span class="badge bg-warning">2</span></h5>
-                    </td>
-                    <td class="align-middle">
-                      Широко известен благодаря своему вкладу в создание устройств, работающих на переменном токе...
-                    </td>
-                    <td class="align-middle">
-                      <a href="#!" data-mdb-tooltip-init title="Done"><i
-                          class="fas fa-edit fa-lg text-warning me-3"></i></a>
-                      <a href="#!" data-mdb-tooltip-init title="Remove"><i
-                          class="fas fa-trash-alt fa-lg text-danger"></i></a>
-                    </td>
-                  </tr>
-                  <tr class="fw-normal">
-                    <th class="border-0">
-                      <div class="person-img-name-container">
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Elon_Musk_Royal_Society.jpg/400px-Elon_Musk_Royal_Society.jpg"
-                            alt="avatar 1" class="person-img">
-                        <span>Илон Маск</span>
-                      </div>
-                    </th>
-                    <td class="border-0 align-middle"><h5 class="mb-0"><span class="badge bg-warning">2</span></h5></td>
-                    <td class="border-0 align-middle">
-                      В 2002 году Маск основал SpaceX, компанию по производству аэрокосмической...
-                    </td>
-                    <td class="border-0 align-middle">
-                      <a href="#!" data-mdb-tooltip-init title="Done"><i
-                          class="fas fa-edit fa-lg text-warning me-3"></i></a>
-                      <a href="#!" data-mdb-tooltip-init title="Remove"><i
-                          class="fas fa-trash-alt fa-lg text-danger"></i></a>
-                    </td>
-                  </tr>
+                  <SinglePerson
+                      v-for="(person, index) in persons"
+                      :key="person.id"
+                      :name="person.name"
+                      :img="person.img"
+                      :road="person.road"
+                      :description="person.desc"
+                      :isLast="index === persons.length - 1"
+                  />
                   </tbody>
                 </table>
 

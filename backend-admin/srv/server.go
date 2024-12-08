@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"backend-admin/models"
 )
@@ -37,6 +38,11 @@ func NewServer(personsService personService, imagesService imagesService, port s
 
 func (s *Server) Run() {
 	e := echo.New()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/:roadID", s.getPersonByRoad)
