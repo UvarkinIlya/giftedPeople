@@ -1,11 +1,16 @@
 package service
 
-import "backend-admin/models"
+import (
+	"math/rand"
+
+	"backend-admin/models"
+)
 
 type storage interface {
 	GetAllPersons() ([]models.Person, error)
 	Create(person models.Person) error
 	Delete(personId string) error
+	GetPersonsByRoad(roadId string) ([]models.Person, error)
 }
 
 type PersonService struct {
@@ -37,4 +42,13 @@ func (s *PersonService) Update(person models.Person) error {
 
 func (s *PersonService) Delete(personId string) error {
 	return s.storage.Delete(personId)
+}
+
+func (s *PersonService) GetPersonByRoad(roadID string) (models.Person, error) {
+	persons, err := s.storage.GetPersonsByRoad(roadID)
+	if err != nil {
+		return models.Person{}, err
+	}
+
+	return persons[rand.Intn(len(persons))], nil
 }

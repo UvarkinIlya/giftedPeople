@@ -16,6 +16,7 @@ type personService interface {
 	GetAllPersons() ([]models.Person, error)
 	Create(person models.Person) error
 	Delete(personId string) error
+	GetPersonByRoad(roadID string) (models.Person, error)
 }
 
 type imagesService interface {
@@ -46,7 +47,7 @@ func (s *Server) Run() {
 	}))
 
 	e.GET("/person", s.getAllPersons)
-	e.GET("/person/:roadID", s.getPersonByRoad)
+	e.GET("/person/by-road-id/:roadID", s.getPersonByRoad)
 	e.POST("/person", s.createPerson)
 	e.PUT("/person", s.updatePerson)
 	e.DELETE("/person/:id", s.deletePerson)
@@ -114,8 +115,13 @@ func (s *Server) deletePerson(c echo.Context) error {
 }
 
 func (s *Server) getPersonByRoad(c echo.Context) error {
-	panic("implement me")
-	return nil
+	roadId := c.Param("roadID")
+	person, err := s.personsService.GetPersonByRoad(roadId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, person)
 }
 
 func (s *Server) getPersonImg(c echo.Context) error {

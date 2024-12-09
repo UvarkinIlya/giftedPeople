@@ -73,6 +73,19 @@ func (s *Storage) Delete(personId string) error {
 	return err
 }
 
+func (s *Storage) GetPersonsByRoad(roadId string) ([]models.Person, error) {
+	cursor, err := s.personsCollection.Find(context.Background(), bson.D{{"road", roadId}})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	persons := make([]models.Person, 0)
+	err = cursor.All(context.Background(), &persons)
+
+	return persons, nil
+}
+
 func (s *Storage) GetImg(imageId string) (io.Reader, error) {
 	buf := bytes.NewBuffer(nil)
 	_, err := s.imagesCollection.DownloadToStreamByName(imageId, buf)
