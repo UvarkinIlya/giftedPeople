@@ -10,18 +10,31 @@ import {
   MDBModalTitle,
   MDBTextarea
 } from 'mdb-vue-ui-kit';
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import axios from 'axios';
 
-const props = defineProps(["personId" ,"personName", "road", "description", "action"])
+const props = defineProps(["personData", "action"])
 const emits = defineEmits(['close', 'update'])
 
+console.log(props);
 const isModalOpen = ref(false);
 
-const personName = ref(props.personName);
-const personRoad = ref(props.road);
-const personDescription = ref(props.description);
+const personId = ref("");
+const personName = ref("");
+const personRoad = ref("");
+const personDescription = ref("");
 const personPhoto = ref();
+
+watch(
+    () => props.personData,
+    (newVal) => {
+
+      personId.value = newVal.id
+      personName.value = newVal.name;
+      personRoad.value = newVal.road;
+      personDescription.value = newVal.description;
+    }
+);
 
 const savePerson = async () => {
   const person = {
@@ -34,7 +47,7 @@ const savePerson = async () => {
   console.log(person);
   if (props.action === "PUT") {
     try {
-      const response = await axios.put("http://localhost:8080/person/" + props.personId, person, {
+      const response = await axios.put("http://localhost:8080/person/" + personId.value, person, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

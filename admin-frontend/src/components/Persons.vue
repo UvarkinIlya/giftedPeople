@@ -26,16 +26,22 @@ const update = async () => {
   console.log(persons);
 }
 
-const updatePerson = (e) => {
+const updatePersonModel = (e) => {
   updateData.value = {
     id:e.id,
     name:e.name,
     road:e.road,
     description:e.description,
   }
+  console.log(e);
   console.log(updateData);
   isUpdateModelOpen.value = true
 }
+
+const handleUpdate = (updatedPerson) => {
+  console.log('Updated Person:', updatedPerson);
+  // Perform further actions, such as saving the updated data
+};
 
 update()
 </script>
@@ -78,7 +84,7 @@ update()
                       :road="person.road"
                       :description="person.desc"
                       :isLast="index === persons.length - 1"
-                      @updatePerson="updatePerson"
+                      @updatePerson="updatePersonModel"
                       @removePerson="update"
                   />
                   </tbody>
@@ -93,7 +99,7 @@ update()
 
 
   <ModalPerson v-model="isModelOpen" @update="update" @close="isModelOpen=false"/>
-  <ModalPerson :person-id="updateData.id" :person-name="updateData.name" :road="updateData.road" :description="updateData.description" :action="put" v-model="isUpdateModelOpen" @update="update" @close="isUpdateModelOpen=false"/>
+  <ModalPerson v-model="isUpdateModelOpen" :person-data="updateData" :action="put" @update="update" @close="isUpdateModelOpen=false"/>
 </template>
 
 <style>
