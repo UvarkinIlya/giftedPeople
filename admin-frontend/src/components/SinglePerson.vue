@@ -1,7 +1,11 @@
-<script setup lang="ts">
+<script setup>
   import {ref} from "vue";
 
   const props = defineProps(["name", "img", "road", "description", "isLast"])
+
+  const getImageUrl = (imgID) => {
+    return `http://localhost:8080/person-image/${imgID}`;
+  };
 </script>
 
 <template>
@@ -9,7 +13,7 @@
     <th :class="isLast ? 'border-0' : ''">
       <div class="person-img-name-container">
         <img
-            :src="img"
+            :src="getImageUrl(img)"
             alt="avatar 1" class="person-img">
         <span>{{ name }}</span>
       </div>

@@ -1,6 +1,7 @@
 package srv
 
 import (
+	"bytes"
 	"io"
 	"net/http"
 
@@ -50,7 +51,7 @@ func (s *Server) Run() {
 	e.PUT("/person", s.updatePerson)
 	e.DELETE("/person", s.deletePerson)
 
-	// TODO send file
+	e.GET("/person-image/:id", s.getPersonImg)
 
 	e.Logger.Fatal(e.Start(":" + s.port))
 }
@@ -110,6 +111,21 @@ func (s *Server) deletePerson(c echo.Context) error {
 func (s *Server) getPersonByRoad(c echo.Context) error {
 	panic("implement me")
 	return nil
+}
+
+func (s *Server) getPersonImg(c echo.Context) error {
+	id := c.Param("id")
+	img, err := s.imagesService.GetImg(id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	buf := new(bytes.Buffer)
+	_, err = buf.ReadFrom(img)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.Blob(http.StatusOK, "image/jpg", buf.Bytes())
 }
 
 func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person, err error) {
