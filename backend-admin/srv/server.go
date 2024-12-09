@@ -42,14 +42,14 @@ func (s *Server) Run() {
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 	}))
 
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/:roadID", s.getPersonByRoad)
 	e.POST("/person", s.createPerson)
 	e.PUT("/person", s.updatePerson)
-	e.DELETE("/person", s.deletePerson)
+	e.DELETE("/person/:id", s.deletePerson)
 
 	e.GET("/person-image/:id", s.getPersonImg)
 
@@ -104,8 +104,13 @@ func (s *Server) updatePerson(c echo.Context) error {
 }
 
 func (s *Server) deletePerson(c echo.Context) error {
-	panic("implement me")
-	return nil
+	id := c.Param("id")
+	err := s.personsService.Delete(id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
 }
 
 func (s *Server) getPersonByRoad(c echo.Context) error {

@@ -1,10 +1,22 @@
 <script setup>
   import {ref} from "vue";
+  import axios from "axios";
 
-  const props = defineProps(["name", "img", "road", "description", "isLast"])
+  const props = defineProps(["id", "name", "img", "road", "description", "isLast"])
 
   const getImageUrl = (imgID) => {
     return `http://localhost:8080/person-image/${imgID}`;
+  };
+
+  const emits = defineEmits(['updatePersons'])
+
+  const removeItem = async (id) => {
+    try {
+      const response = await axios.delete("http://localhost:8080/person/"+id);
+    } catch (error) {
+      console.log(error);
+    }
+    emits('updatePersons')
   };
 </script>
 
@@ -26,9 +38,9 @@
       {{ description }}
     </td>
     <td :class="isLast ? 'border-0' : ''" class="align-middle">
-      <a href="#!" data-mdb-tooltip-init title="Done"><i
+      <a href="javascript:void(0)" data-mdb-tooltip-init title="Done"><i
           class="fas fa-edit fa-lg text-warning me-3"></i></a>
-      <a href="#!" data-mdb-tooltip-init title="Remove"><i
+      <a href="javascript:void(0)" @click="removeItem(id)" data-mdb-tooltip-init title="Remove"><i
           class="fas fa-trash-alt fa-lg text-danger"></i></a>
     </td>
   </tr>

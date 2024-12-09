@@ -50,12 +50,14 @@ update()
                   <tbody>
                   <SinglePerson
                       v-for="(person, index) in persons"
+                      :id="person.id"
                       :key="person.id"
                       :name="person.name"
                       :img="person.img"
                       :road="person.road"
                       :description="person.desc"
                       :isLast="index === persons.length - 1"
+                      @updatePersons="update"
                   />
                   </tbody>
                 </table>

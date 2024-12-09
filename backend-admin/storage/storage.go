@@ -69,7 +69,7 @@ func (s *Storage) Create(person models.Person) error {
 }
 
 func (s *Storage) Delete(personId string) error {
-	_, err := s.personsCollection.DeleteOne(context.Background(), personId)
+	_, err := s.personsCollection.DeleteOne(context.Background(), bson.D{{"id", personId}})
 	return err
 }
 
