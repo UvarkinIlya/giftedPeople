@@ -9,6 +9,7 @@ import (
 type storage interface {
 	GetAllPersons() ([]models.Person, error)
 	Create(person models.Person) error
+	Update(person models.Person) error
 	Delete(personId string) error
 	GetPersonsByRoad(roadId string) ([]models.Person, error)
 }
@@ -32,12 +33,12 @@ func (s *PersonService) Create(person models.Person) error {
 }
 
 func (s *PersonService) Update(person models.Person) error {
-	err := s.storage.Delete(person.ID)
+	err := s.storage.Update(person)
 	if err != nil {
 		return err
 	}
 
-	return s.storage.Create(person)
+	return nil
 }
 
 func (s *PersonService) Delete(personId string) error {

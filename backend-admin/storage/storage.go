@@ -68,6 +68,11 @@ func (s *Storage) Create(person models.Person) error {
 	return err
 }
 
+func (s *Storage) Update(person models.Person) error {
+	_, err := s.personsCollection.ReplaceOne(context.Background(), bson.D{{"id", person.ID}}, person)
+	return err
+}
+
 func (s *Storage) Delete(personId string) error {
 	_, err := s.personsCollection.DeleteOne(context.Background(), bson.D{{"id", personId}})
 	return err

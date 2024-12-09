@@ -15,6 +15,7 @@ import (
 type personService interface {
 	GetAllPersons() ([]models.Person, error)
 	Create(person models.Person) error
+	Update(person models.Person) error
 	Delete(personId string) error
 	GetPersonByRoad(roadID string) (models.Person, error)
 }
@@ -49,7 +50,7 @@ func (s *Server) Run() {
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/by-road-id/:roadID", s.getPersonByRoad)
 	e.POST("/person", s.createPerson)
-	e.PUT("/person", s.updatePerson)
+	e.PUT("/person/:id", s.updatePerson)
 	e.DELETE("/person/:id", s.deletePerson)
 
 	e.GET("/person-image/:id", s.getPersonImg)
@@ -86,6 +87,8 @@ func (s *Server) createPerson(c echo.Context) error {
 }
 
 func (s *Server) updatePerson(c echo.Context) error {
+	personId := c.Param("id")
+
 	img, person, err := getImgAndPerson(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -96,7 +99,8 @@ func (s *Server) updatePerson(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	err = s.personsService.Create(person)
+	person.ID = personId
+	err = s.personsService.Update(person)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

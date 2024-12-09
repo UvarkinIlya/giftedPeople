@@ -13,13 +13,14 @@ import {
 import {ref} from 'vue';
 import axios from 'axios';
 
+const props = defineProps(["personId" ,"personName", "road", "description", "action"])
 const emits = defineEmits(['close', 'update'])
 
 const isModalOpen = ref(false);
 
-const personName = ref('');
-const personRoad = ref('');
-const personDescription = ref('');
+const personName = ref(props.personName);
+const personRoad = ref(props.road);
+const personDescription = ref(props.description);
 const personPhoto = ref();
 
 const savePerson = async () => {
@@ -31,15 +32,28 @@ const savePerson = async () => {
   }
 
   console.log(person);
-  try {
-    const response = await axios.post("http://localhost:8080/person", person, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  } catch (error) {
-    console.log(error);
+  if (props.action === "PUT") {
+    try {
+      const response = await axios.put("http://localhost:8080/person/" + props.personId, person, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  } else{
+    try {
+      const response = await axios.post("http://localhost:8080/person", person, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
+
   emits('close')
   emits('update')
 };
@@ -56,13 +70,12 @@ const savePerson = async () => {
   >
     <form>
       <MDBModalHeader>
-        <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
+        <MDBModalTitle>Добавить личность</MDBModalTitle>
       </MDBModalHeader>
       <MDBModalBody>
         <MDBInput
             type="text"
             label="Личность"
-            id="formName"
             wrapperClass="mb-4"
             v-model="personName"
         />
@@ -70,14 +83,12 @@ const savePerson = async () => {
         <MDBInput
             type="text"
             label="Траектория"
-            id="formEmail"
             wrapperClass="mb-4"
             v-model="personRoad"
         />
 
         <MDBTextarea
             label="Описание"
-            id="formTextarea"
             wrapperClass="mb-4"
             v-model="personDescription"
         />
