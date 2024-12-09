@@ -3,17 +3,20 @@ import {
   MDBContainer,
   MDBBtn,
 } from 'mdb-vue-ui-kit';
-import {ref} from 'vue';
+import {nextTick, ref} from 'vue';
 import ModalPerson from "./ModalPerson.vue";
 import SinglePerson from "./SinglePerson.vue";
 
 const isModelOpen = ref(false);
+const persons = ref([]);
 
+const update = async () => {
+  const response = await fetch("http://localhost:8080/person");
+  persons.value = await response.json();
+  console.log(persons);
+}
 
-const persons = ref(null);
-fetch('http://localhost:8080/person')
-    .then(response => response.json())
-    .then(data => persons.value = data);
+update()
 </script>
 
 <template>
@@ -56,11 +59,8 @@ fetch('http://localhost:8080/person')
                   />
                   </tbody>
                 </table>
-
-
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@ fetch('http://localhost:8080/person')
   </MDBContainer>
 
 
-  <ModalPerson v-model="isModelOpen" @close="isModelOpen=false"/>
+  <ModalPerson v-model="isModelOpen" @update="update" @close="isModelOpen=false"/>
 </template>
 
 <style>

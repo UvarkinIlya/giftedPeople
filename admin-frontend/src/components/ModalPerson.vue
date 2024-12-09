@@ -13,7 +13,7 @@ import {
 import {ref} from 'vue';
 import axios from 'axios';
 
-const emit = defineEmits(['close'])
+const emits = defineEmits(['close', 'update'])
 
 const isModalOpen = ref(false);
 
@@ -22,7 +22,7 @@ const personRoad = ref('');
 const personDescription = ref('');
 const personPhoto = ref();
 
-const savePerson = () => {
+const savePerson = async () => {
   const person = {
     name: personName.value,
     road: personRoad.value,
@@ -32,7 +32,7 @@ const savePerson = () => {
 
   console.log(person);
   try {
-    const response = axios.post("http://localhost:8080/person", person, {
+    const response = await axios.post("http://localhost:8080/person", person, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -40,7 +40,8 @@ const savePerson = () => {
   } catch (error) {
     console.log(error);
   }
-  emit('close')
+  emits('close')
+  emits('update')
 };
 </script>
 
