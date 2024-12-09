@@ -1,18 +1,47 @@
-<script setup lang="ts">
+<script setup>
 import {
+  MDBBtn,
+  MDBFile,
+  MDBInput,
   MDBModal,
-  MDBModalHeader,
-  MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
-  MDBBtn,
-  MDBInput,
-  MDBTextarea,
-  MDBFile
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBTextarea
 } from 'mdb-vue-ui-kit';
-import { ref } from 'vue';
+import {ref} from 'vue';
+import axios from 'axios';
+
+const emit = defineEmits(['close'])
 
 const isModalOpen = ref(false);
+
+const personName = ref('');
+const personRoad = ref('');
+const personDescription = ref('');
+const personPhoto = ref();
+
+const savePerson = () => {
+  const person = {
+    name: personName.value,
+    road: personRoad.value,
+    description: personDescription.value,
+    file: personPhoto.value,
+  }
+
+  console.log(person);
+  try {
+    const response = axios.post("http://localhost:8080/person", person, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  emit('close')
+};
 </script>
 
 <template>
@@ -21,38 +50,44 @@ const isModalOpen = ref(false);
       tabindex="-1"
       labelledby="addPersonModalLabel"
       size="lg"
+      v-on:submit.prevent="savePerson"
       v-model="isModalOpen"
   >
-    <MDBModalHeader>
-      <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
-    </MDBModalHeader>
-    <MDBModalBody>
-      <MDBInput
-          type="text"
-          label="Личность"
-          id="formName"
-          wrapperClass="mb-4"
-      />
+    <form>
+      <MDBModalHeader>
+        <MDBModalTitle id="addPersonModalLabel">Добавить личность</MDBModalTitle>
+      </MDBModalHeader>
+      <MDBModalBody>
+        <MDBInput
+            type="text"
+            label="Личность"
+            id="formName"
+            wrapperClass="mb-4"
+            v-model="personName"
+        />
 
-      <MDBInput
-          type="email"
-          label="Траектория"
-          id="formEmail"
-          wrapperClass="mb-4"
-      />
+        <MDBInput
+            type="text"
+            label="Траектория"
+            id="formEmail"
+            wrapperClass="mb-4"
+            v-model="personRoad"
+        />
 
-      <MDBTextarea
-          label="Описание"
-          id="formTextarea"
-          wrapperClass="mb-4"
-      />
+        <MDBTextarea
+            label="Описание"
+            id="formTextarea"
+            wrapperClass="mb-4"
+            v-model="personDescription"
+        />
 
-      <MDBFile label="Добавить фото" />
-    </MDBModalBody>
-    <MDBModalFooter>
-      <MDBBtn color="secondary" @click="$emit('close')">Закрыть</MDBBtn>
-      <MDBBtn color="success" @click="$emit('close')">Сохранить</MDBBtn>
-    </MDBModalFooter>
+        <MDBFile label="Добавить фото" v-model="personPhoto"/>
+      </MDBModalBody>
+      <MDBModalFooter>
+        <MDBBtn color="secondary" @click="$emit('close')">Закрыть</MDBBtn>
+        <MDBBtn color="success" type="submit">Сохранить</MDBBtn>
+      </MDBModalFooter>
+    </form>
   </MDBModal>
 </template>
 

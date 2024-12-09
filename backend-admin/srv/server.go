@@ -115,7 +115,7 @@ func (s *Server) getPersonByRoad(c echo.Context) error {
 func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person, err error) {
 	imgID := uuid.NewString()
 
-	file, err := c.FormFile("file")
+	file, err := c.FormFile("file[]")
 	if err != nil {
 		return models.ImgWithID{}, models.Person{}, err
 	}
@@ -133,7 +133,7 @@ func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person
 	person = models.Person{
 		ID:          uuid.NewString(),
 		Name:        c.FormValue("name"),
-		Road:        c.FormValue("roadID"),
+		Road:        c.FormValue("road"),
 		Description: c.FormValue("description"),
 		Img:         imgID,
 	}
