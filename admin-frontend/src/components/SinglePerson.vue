@@ -5,13 +5,11 @@
 
   const props = defineProps(["id", "name", "img", "road", "description", "isLast"])
 
-  const put = "PUT"
-  const isModelOpen = ref(false);
   const getImageUrl = (imgID) => {
     return `http://localhost:8080/person-image/${imgID}`;
   };
 
-  const emits = defineEmits(['updatePersons'])
+  const emits = defineEmits(['updatePerson', 'removePerson'])
 
   const removeItem = async (id) => {
     try {
@@ -19,7 +17,18 @@
     } catch (error) {
       console.log(error);
     }
-    emits('updatePersons')
+    emits('removePerson')
+  };
+
+  const updateItem = async () => {
+    const person = {
+      id: props.id,
+      name: props.name,
+      img: props.img,
+      road: props.road,
+      description: props.description,
+    }
+    emits('updatePerson', person)
   };
 </script>
 
@@ -41,14 +50,12 @@
       {{ description }}
     </td>
     <td :class="isLast ? 'border-0' : ''" class="align-middle">
-      <a href="javascript:void(0)" @click="isModelOpen=true" data-mdb-tooltip-init title="Done"><i
+      <a href="javascript:void(0)" @click="updateItem" data-mdb-tooltip-init title="Done"><i
           class="fas fa-edit fa-lg text-warning me-3"></i></a>
       <a href="javascript:void(0)" @click="removeItem(id)" data-mdb-tooltip-init title="Remove"><i
           class="fas fa-trash-alt fa-lg text-danger"></i></a>
     </td>
   </tr>
-
-  <ModalPerson :person-id="id" :personName="name" :road="road" :description="description" :action="put" v-model="isModelOpen" @close="isModelOpen=false" @update="emits('updatePersons')"/>
 </template>
 
 <style scoped>

@@ -70,7 +70,7 @@ const savePerson = async () => {
   >
     <form>
       <MDBModalHeader>
-        <MDBModalTitle>Добавить личность</MDBModalTitle>
+        <MDBModalTitle>{{props.action !== "PUT" ? "Добавить личность" : "Обновить личность"}}</MDBModalTitle>
       </MDBModalHeader>
       <MDBModalBody>
         <MDBInput
@@ -93,7 +93,7 @@ const savePerson = async () => {
             v-model="personDescription"
         />
 
-        <MDBFile label="Добавить фото" v-model="personPhoto"/>
+        <MDBFile :label="props.action !== 'PUT' ? 'Добавить фото' : 'Обновить фото'" v-model="personPhoto"/>
       </MDBModalBody>
       <MDBModalFooter>
         <MDBBtn color="secondary" @click="$emit('close')">Закрыть</MDBBtn>

@@ -7,13 +7,34 @@ import {nextTick, ref} from 'vue';
 import ModalPerson from "./ModalPerson.vue";
 import SinglePerson from "./SinglePerson.vue";
 
+const put = "PUT"
 const isModelOpen = ref(false);
+const isUpdateModelOpen = ref(false);
 const persons = ref([]);
+const updateData = ref(
+    {
+      id:"",
+      name:"",
+      road:"",
+      description:"",
+    })
+
 
 const update = async () => {
   const response = await fetch("http://localhost:8080/person");
   persons.value = await response.json();
   console.log(persons);
+}
+
+const updatePerson = (e) => {
+  updateData.value = {
+    id:e.id,
+    name:e.name,
+    road:e.road,
+    description:e.description,
+  }
+  console.log(updateData);
+  isUpdateModelOpen.value = true
 }
 
 update()
@@ -57,7 +78,8 @@ update()
                       :road="person.road"
                       :description="person.desc"
                       :isLast="index === persons.length - 1"
-                      @updatePersons="update"
+                      @updatePerson="updatePerson"
+                      @removePerson="update"
                   />
                   </tbody>
                 </table>
@@ -71,6 +93,7 @@ update()
 
 
   <ModalPerson v-model="isModelOpen" @update="update" @close="isModelOpen=false"/>
+  <ModalPerson :person-id="updateData.id" :person-name="updateData.name" :road="updateData.road" :description="updateData.description" :action="put" v-model="isUpdateModelOpen" @update="update" @close="isUpdateModelOpen=false"/>
 </template>
 
 <style>
