@@ -88,15 +88,20 @@ func (s *Server) createPerson(c echo.Context) error {
 
 func (s *Server) updatePerson(c echo.Context) error {
 	personId := c.Param("id")
-
-	img, person, err := getImgAndPerson(c)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	img, err := getImg(c)
+	if err == nil {
+		err = s.imagesService.SaveImg(img.ID, img.File)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
 	}
 
-	err = s.imagesService.SaveImg(img.ID, img.File)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	person := models.Person{
+		ID:          uuid.NewString(),
+		Name:        c.FormValue("name"),
+		Road:        c.FormValue("road"),
+		Description: c.FormValue("description"),
+		Img:         img.ID,
 	}
 
 	person.ID = personId
@@ -144,21 +149,9 @@ func (s *Server) getPersonImg(c echo.Context) error {
 }
 
 func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person, err error) {
-	imgID := uuid.NewString()
-
-	file, err := c.FormFile("file[]")
+	img, err = getImg(c)
 	if err != nil {
 		return models.ImgWithID{}, models.Person{}, err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return models.ImgWithID{}, models.Person{}, err
-	}
-	defer src.Close()
-
-	img = models.ImgWithID{
-		ID:   imgID,
-		File: src,
 	}
 
 	person = models.Person{
@@ -166,8 +159,27 @@ func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person
 		Name:        c.FormValue("name"),
 		Road:        c.FormValue("road"),
 		Description: c.FormValue("description"),
-		Img:         imgID,
+		Img:         img.ID,
 	}
 
 	return img, person, nil
+}
+
+func getImg(c echo.Context) (models.ImgWithID, error) {
+	imgID := uuid.NewString()
+
+	file, err := c.FormFile("file[]")
+	if err != nil {
+		return models.ImgWithID{}, err
+	}
+	src, err := file.Open()
+	if err != nil {
+		return models.ImgWithID{}, err
+	}
+	defer src.Close()
+
+	return models.ImgWithID{
+		ID:   imgID,
+		File: src,
+	}, nil
 }

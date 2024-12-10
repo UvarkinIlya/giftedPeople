@@ -38,10 +38,15 @@ const updatePersonModel = (e) => {
   isUpdateModelOpen.value = true
 }
 
-const handleUpdate = (updatedPerson) => {
-  console.log('Updated Person:', updatedPerson);
-  // Perform further actions, such as saving the updated data
-};
+const modalOpen = (e) => {
+  updateData.value = {
+    id:"",
+    name:"",
+    road:"",
+    description:"",
+  }
+  isModelOpen.value=true
+}
 
 update()
 </script>
@@ -63,7 +68,7 @@ update()
                       class="btn btn-success position-absolute end-0 top-50 translate-middle-y"
                       color="success"
                       aria-controls="isModalOpen"
-                      @click="isModelOpen=true">Добавить</MDBBtn>
+                      @click="modalOpen">Добавить</MDBBtn>
                 </div>
                 <table class="table text-white mb-0">
                   <thead>

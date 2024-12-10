@@ -63,6 +63,17 @@ func (s *Storage) GetAllPersons() ([]models.Person, error) {
 	return persons, nil
 }
 
+func (s *Storage) Get(id string) (models.Person, error) {
+	result := s.personsCollection.FindOne(context.Background(), bson.D{{"id", id}})
+	var p models.Person
+	err := result.Decode(&p)
+	if err != nil {
+		return models.Person{}, err
+	}
+
+	return p, nil
+}
+
 func (s *Storage) Create(person models.Person) error {
 	_, err := s.personsCollection.InsertOne(context.Background(), person)
 	return err

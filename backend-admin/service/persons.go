@@ -7,6 +7,7 @@ import (
 )
 
 type storage interface {
+	Get(id string) (models.Person, error)
 	GetAllPersons() ([]models.Person, error)
 	Create(person models.Person) error
 	Update(person models.Person) error
@@ -33,7 +34,16 @@ func (s *PersonService) Create(person models.Person) error {
 }
 
 func (s *PersonService) Update(person models.Person) error {
-	err := s.storage.Update(person)
+	oldPerson, err := s.storage.Get(person.ID)
+	if err != nil {
+		return err
+	}
+
+	if person.Img == "" {
+		person.Img = oldPerson.Img
+	}
+
+	err = s.storage.Update(person)
 	if err != nil {
 		return err
 	}

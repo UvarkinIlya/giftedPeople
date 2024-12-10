@@ -25,16 +25,19 @@ const personRoad = ref("");
 const personDescription = ref("");
 const personPhoto = ref();
 
-watch(
-    () => props.personData,
-    (newVal) => {
+if (props.action === "PUT"){
+  watch(
+      () => props.personData,
+      (newVal) => {
 
-      personId.value = newVal.id
-      personName.value = newVal.name;
-      personRoad.value = newVal.road;
-      personDescription.value = newVal.description;
-    }
-);
+        personId.value = newVal.id
+        personName.value = newVal.name;
+        personRoad.value = newVal.road;
+        personDescription.value = newVal.description;
+      }
+  );
+}
+
 
 const savePerson = async () => {
   const person = {
@@ -69,6 +72,12 @@ const savePerson = async () => {
 
   emits('close')
   emits('update')
+
+  personId.value = ""
+  personName.value = ""
+  personRoad.value = ""
+  personDescription.value = ""
+  personPhoto.value = ""
 };
 </script>
 
