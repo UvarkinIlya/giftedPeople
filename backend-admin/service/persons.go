@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"math/rand"
 
 	"backend-admin/models"
@@ -57,6 +58,10 @@ func (s *PersonService) Delete(personId string) error {
 
 func (s *PersonService) GetPersonByRoad(roadID string) (models.Person, error) {
 	persons, err := s.storage.GetPersonsByRoad(roadID)
+	if len(persons) == 0 {
+		return models.Person{}, fmt.Errorf("person not found")
+	}
+
 	if err != nil {
 		return models.Person{}, err
 	}
