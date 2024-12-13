@@ -4,16 +4,22 @@
 
     <!-- Первый вопрос -->
     <div v-if="!answeredFirst" class="question">
+      <!-- Текст вопроса -->
       <p class="question-text">{{ currentQuestion }}</p>
 
-      <div class="buttons">
+      <!-- Кнопки "Да" и "Нет" -->
+      <div class="buttons" v-if="!showErrorFirst">
         <button class="yes-btn" @click="handleYesFirstClick">Да</button>
         <button class="no-btn" @click="handleNoFirstClick">Нет</button>
       </div>
 
-      <p v-if="showErrorFirst" class="error-message">
-        Данный тест не предназначен для выявления сферы одарённости и не может помочь в выборе стратегии её развития, если она не определена
-      </p>
+      <!-- Сообщение об ошибке и кнопка "Начать тест заново" -->
+      <div v-else>
+        <p class="error-message">
+          Данный тест не предназначен для выявления сферы одарённости и не может помочь в выборе стратегии её развития, если она не определена
+        </p>
+        <button class="restart-button" @click="restartTest">Начать тест заново</button>
+      </div>
     </div>
 
     <!-- Второй вопрос -->
@@ -47,19 +53,25 @@
     </div>
 
     <!-- Пятый вопрос -->
-    <div v-if="answeredFourth && !answeredFifth" class="question">
+    <div v-if="answeredFourth && !answeredFifth && !logicalError" class="question">
       <p class="question-text">{{ fifthQuestion }}</p>
-
       <div class="buttons">
         <button class="yes-btn" @click="handleYesFifthClick">Да</button>
         <button class="no-btn" @click="handleNoFifthClick">Нет</button>
       </div>
     </div>
 
-    <!-- Шестой вопрос -->
-    <div v-if="answeredFifth && !answeredSixth" class="question">
-      <p class="question-text">{{ sixthQuestion }}</p>
+    <!-- Пятый вопрос, если логическая ошибка -->
+    <div v-if="logicalError" class="question">
+      <p class="error-message">
+        Если у вас нет формального образования в вашей сфере одарённости, то ответ на второй вопрос не может быть «Да».
+      </p>
+      <button class="restart-button" @click="restartTest">Начать тест заново</button>
+    </div>
 
+    <!-- Шестой вопрос -->
+    <div v-if="answeredFifth && !answeredSixth && !logicalError" class="question">
+      <p class="question-text">{{ sixthQuestion }}</p>
       <div class="buttons vertical">
         <button class="yes-btn" @click="handleYesSixthClick">Моя сфера приложений усилий – традиционная</button>
         <button class="no-btn" @click="handleNoSixthClick">Я ищу новаторские пути, хочу создать совершенно новую отрасль/продукт</button>
@@ -92,10 +104,7 @@
     </div>
 
 
-    <!-- Сообщение о логической ошибке -->
-    <p v-if="logicalError" class="error-message">
-      Если у вас нет формального образования в вашей сфере одарённости, то ответ на второй вопрос не может быть «Да».
-    </p>
+
   </div>
 </template>
 
