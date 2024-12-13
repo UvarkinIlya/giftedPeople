@@ -8,5 +8,5 @@
 `./main`
 
 ### Ссылки
-http://localhost:5173/#/questions
-http://localhost:5173/#/admin
+- http://localhost:5173/#/questions
+- http://localhost:5173/#/admin
