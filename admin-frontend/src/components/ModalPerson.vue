@@ -47,24 +47,24 @@ const savePerson = async () => {
     file: personPhoto.value,
   }
 
+  const formData = new FormData()
+  formData.append("file[]", personPhoto.value)
+  formData.append("name", personName.value)
+  formData.append("road", personRoad.value)
+  formData.append("description", personDescription.value)
+
+
   console.log(person);
+
   if (props.action === "PUT") {
     try {
-      const response = await axios.put("http://" + window.location.hostname + ":8080/person/" + personId.value, person, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.put("http://" + window.location.hostname + ":8080/person/" + personId.value, formData)
     } catch (error) {
       console.log(error);
     }
   } else{
     try {
-      const response = await axios.post("http://" + window.location.hostname + ":8080/person", person, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post("http://" + window.location.hostname + ":8080/person", formData);
     } catch (error) {
       console.log(error);
     }

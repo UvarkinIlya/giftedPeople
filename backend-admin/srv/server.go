@@ -41,9 +41,12 @@ func NewServer(personsService personService, imagesService imagesService, port s
 
 func (s *Server) Run() {
 	e := echo.New()
-
-	e.Use(middleware.CORS())
-
+	e.Use(middleware.BodyLimit("10M"))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"}, // Разрешить все источники (или замените на нужные)
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
+	}))
+	println("UVAR_42")
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/by-road-id/:roadID", s.getPersonByRoad)
 	e.POST("/person", s.createPerson)
