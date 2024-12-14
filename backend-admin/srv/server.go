@@ -42,10 +42,7 @@ func NewServer(personsService personService, imagesService imagesService, port s
 func (s *Server) Run() {
 	e := echo.New()
 
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
-	}))
+	e.Use(middleware.CORS())
 
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/by-road-id/:roadID", s.getPersonByRoad)

@@ -98,7 +98,7 @@
       <div v-if="randomUser && userImage">
         <h3>{{ randomUser.name }}</h3>
         <p>{{ randomUser.desc }}</p>
-        <img :src="'http://localhost:8080/person-image/' + randomUser.img" alt="Фото пользователя" class="user-image">
+        <img :src="'http://' + window.location.hostname + ':8080/person-image/' + randomUser.img" alt="Фото пользователя" class="user-image">
         <button @click="restartTest" class="restart-button">Начать тест заново</button>
       </div>
     </div>
@@ -189,7 +189,7 @@ export default {
     },
     async getAllUsers() {
       try {
-        const response = await axios.get('http://localhost:8080/person');
+        const response = await axios.get('http://' + window.location.hostname + ':8080/person');
         this.allUsers = response.data;
       } catch (error) {
         console.error("Ошибка при получении данных пользователей", error);
@@ -199,7 +199,7 @@ export default {
     // Метод для получения случайного пользователя из кластера
     async getRandomUserFromCluster(clusterNumber) {
       try {
-        const response = await axios.get(`http://localhost:8080/person/by-road-id/${clusterNumber}`);
+        const response = await axios.get('http://' + window.location.hostname + ':8080/person/by-road-id/${clusterNumber}');
         this.randomUser = response.data;
 
         // После получения пользователя, загружаем его изображение
@@ -214,7 +214,7 @@ export default {
     // Метод для получения фото пользователя
     async getUserImage(imgId) {
       try {
-        const response = await axios.get(`http://localhost:8080/person-image/${imgId}`);
+        const response = await axios.get('http://' + window.location.hostname + ':8080/person-image/${imgId}');
         this.userImage = response.data;
       } catch (error) {
         console.error("Ошибка при получении фото пользователя", error);

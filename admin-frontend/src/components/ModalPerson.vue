@@ -50,7 +50,7 @@ const savePerson = async () => {
   console.log(person);
   if (props.action === "PUT") {
     try {
-      const response = await axios.put("http://localhost:8080/person/" + personId.value, person, {
+      const response = await axios.put("http://" + window.location.hostname + ":8080/person/" + personId.value, person, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -60,7 +60,7 @@ const savePerson = async () => {
     }
   } else{
     try {
-      const response = await axios.post("http://localhost:8080/person", person, {
+      const response = await axios.post("http://" + window.location.hostname + ":8080/person", person, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

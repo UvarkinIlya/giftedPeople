@@ -21,7 +21,7 @@ const updateData = ref(
 
 
 const update = async () => {
-  const response = await fetch("http://localhost:8080/person");
+  const response = await fetch("http://" + window.location.hostname + ":8080/person");
   persons.value = await response.json();
   console.log(persons);
 }
