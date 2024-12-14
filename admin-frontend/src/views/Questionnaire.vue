@@ -95,7 +95,7 @@
       </p>
 
       <!-- Вывод данных о пользователе -->
-      <div v-if="randomUser && userImage">
+      <div v-if="randomUser">
         <h3>{{ randomUser.name }}</h3>
         <p>{{ randomUser.desc }}</p>
 <!--        <img :src="'http://' + window.location.hostname + ':8080/person-image/' + randomUser.img" alt="Фото пользователя" class="user-image">-->
@@ -203,23 +203,23 @@ export default {
         this.randomUser = response.data;
 
         // После получения пользователя, загружаем его изображение
-        if (this.randomUser && this.randomUser.img) {
-          this.getUserImage(this.randomUser.img); // Передаем imgId для загрузки фото
-        }
+        // if (this.randomUser && this.randomUser.img) {
+        //   // this.getUserImage(this.randomUser.img); // Передаем imgId для загрузки фото
+        // }
       } catch (error) {
         console.error("Ошибка при получении случайного пользователя", error);
       }
     },
 
     // Метод для получения фото пользователя
-    async getUserImage(imgId) {
-      try {
-        const response = await axios.get('http://' + window.location.hostname + `:8080/person-image/${imgId}`);
-        this.userImage = response.data;
-      } catch (error) {
-        console.error("Ошибка при получении фото пользователя", error);
-      }
-    },
+    // async getUserImage(imgId) {
+    //   try {
+    //     const response = await axios.get('http://' + window.location.hostname + `:8080/person-image/${imgId}`);
+    //     this.userImage = response.data;
+    //   } catch (error) {
+    //     console.error("Ошибка при получении фото пользователя", error);
+    //   }
+    // },
     mounted() {
       // Получаем всех пользователей при загрузке компонента
       this.getAllUsers();
