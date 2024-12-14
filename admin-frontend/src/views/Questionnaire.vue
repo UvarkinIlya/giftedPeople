@@ -98,7 +98,7 @@
       <div v-if="randomUser && userImage">
         <h3>{{ randomUser.name }}</h3>
         <p>{{ randomUser.desc }}</p>
-        <img :src="'http://' + window.location.hostname + ':8080/person-image/' + randomUser.img" alt="Фото пользователя" class="user-image">
+<!--        <img :src="'http://' + window.location.hostname + ':8080/person-image/' + randomUser.img" alt="Фото пользователя" class="user-image">-->
         <button @click="restartTest" class="restart-button">Начать тест заново</button>
       </div>
     </div>

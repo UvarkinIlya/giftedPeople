@@ -46,7 +46,6 @@ func (s *Server) Run() {
 		AllowOrigins: []string{"*"}, // Разрешить все источники (или замените на нужные)
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
 	}))
-	println("UVAR_42")
 	e.GET("/person", s.getAllPersons)
 	e.GET("/person/by-road-id/:roadID", s.getPersonByRoad)
 	e.POST("/person", s.createPerson)
@@ -68,15 +67,15 @@ func (s *Server) getAllPersons(c echo.Context) error {
 }
 
 func (s *Server) createPerson(c echo.Context) error {
-	img, person, err := getImgAndPerson(c)
+	_, person, err := getImgAndPerson(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	err = s.imagesService.SaveImg(img.ID, img.File)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
+	// err = s.imagesService.SaveImg(img.ID, img.File)
+	// if err != nil {
+	// 	return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	// }
 
 	err = s.personsService.Create(person)
 	if err != nil {
@@ -88,24 +87,25 @@ func (s *Server) createPerson(c echo.Context) error {
 
 func (s *Server) updatePerson(c echo.Context) error {
 	personId := c.Param("id")
-	img, err := getImg(c)
-	if err == nil {
-		err = s.imagesService.SaveImg(img.ID, img.File)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-		}
-	}
+	// img, err := getImg(c)
+	// if err == nil {
+	// 	err = s.imagesService.SaveImg(img.ID, img.File)
+	// 	if err != nil {
+	// 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	// 	}
+	// }
 
 	person := models.Person{
 		ID:          uuid.NewString(),
 		Name:        c.FormValue("name"),
 		Road:        c.FormValue("road"),
 		Description: c.FormValue("description"),
-		Img:         img.ID,
+		// Img:         img.ID,
+		Img: "",
 	}
 
 	person.ID = personId
-	err = s.personsService.Update(person)
+	err := s.personsService.Update(person)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -149,17 +149,18 @@ func (s *Server) getPersonImg(c echo.Context) error {
 }
 
 func getImgAndPerson(c echo.Context) (img models.ImgWithID, person models.Person, err error) {
-	img, err = getImg(c)
-	if err != nil {
-		return models.ImgWithID{}, models.Person{}, err
-	}
+	// img, err = getImg(c)
+	// if err != nil {
+	// 	return models.ImgWithID{}, models.Person{}, err
+	// }
 
 	person = models.Person{
 		ID:          uuid.NewString(),
 		Name:        c.FormValue("name"),
 		Road:        c.FormValue("road"),
 		Description: c.FormValue("description"),
-		Img:         img.ID,
+		// Img:         img.ID,
+		Img: "",
 	}
 
 	return img, person, nil
