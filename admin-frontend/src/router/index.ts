@@ -6,7 +6,7 @@ const routes = [{
     path: '/admin',
     component: Home
   }, {
-    path: '/questions',
+    path: '/',
     component: Questionnaire
   }]
 
