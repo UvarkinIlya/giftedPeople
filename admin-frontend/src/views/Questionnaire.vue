@@ -199,7 +199,7 @@ export default {
     // Метод для получения случайного пользователя из кластера
     async getRandomUserFromCluster(clusterNumber) {
       try {
-        const response = await axios.get('http://' + window.location.hostname + ':8080/person/by-road-id/${clusterNumber}');
+        const response = await axios.get('http://' + window.location.hostname + `:8080/person/by-road-id/${clusterNumber}`);
         this.randomUser = response.data;
 
         // После получения пользователя, загружаем его изображение
@@ -214,7 +214,7 @@ export default {
     // Метод для получения фото пользователя
     async getUserImage(imgId) {
       try {
-        const response = await axios.get('http://' + window.location.hostname + ':8080/person-image/${imgId}');
+        const response = await axios.get('http://' + window.location.hostname + `:8080/person-image/${imgId}`);
         this.userImage = response.data;
       } catch (error) {
         console.error("Ошибка при получении фото пользователя", error);

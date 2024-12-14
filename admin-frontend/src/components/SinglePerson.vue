@@ -6,7 +6,7 @@
   const props = defineProps(["id", "name", "img", "road", "description", "isLast"])
 
   const getImageUrl = (imgID) => {
-    return "http://" + window.location.hostname + ":8080/person-image/${imgID}";
+    return "http://" + window.location.hostname + `:8080/person-image/${imgID}`;
   };
 
   const emits = defineEmits(['updatePerson', 'removePerson'])
