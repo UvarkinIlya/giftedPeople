@@ -48,7 +48,9 @@ const savePerson = async () => {
   }
 
   const formData = new FormData()
-  formData.append("file[]", personPhoto.value)
+  if (personPhoto.value) {
+    formData.append("file[]", personPhoto.value[0]);
+  }
   formData.append("name", personName.value)
   formData.append("road", personRoad.value)
   formData.append("description", personDescription.value)
