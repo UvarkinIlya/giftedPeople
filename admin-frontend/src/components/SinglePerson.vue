@@ -36,9 +36,9 @@
   <tr class="fw-normal">
     <th :class="isLast ? 'border-0' : ''">
       <div class="person-img-name-container">
-        <img
-            :src="getImageUrl(img)"
-            alt="avatar 1" class="person-img">
+<!--        <img-->
+<!--            :src="getImageUrl(img)"-->
+<!--            alt="avatar 1" class="person-img">-->
         <span>{{ name }}</span>
       </div>
     </th>
